@@ -26,7 +26,11 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center gap-2 p-2 md:p-10 lg:p-24">
-      <h1 className="text-3xl font-bold text-center">Telegram Bot Builder webapp</h1>
+        <img
+    src="./img/sombralong.png"
+    alt="Sombra Batumi"
+    className="w-full max-w-md rounded-xl shadow-lg"
+  />
       <div className="mt-4">
         <p className="">This is a simple webapp that allows you to build a Telegram bot using the Telegram Bot Builder library.</p>
         <p className="">The library is available on the <a href="https://github.com/tgbotbuilder/react-webapp-example" className="underline text-blue-600">GitHub repository</a>.</p>
