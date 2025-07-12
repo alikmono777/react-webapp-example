@@ -62,10 +62,7 @@ export default function Home() {
             {places.map(place =>
 <div className="max-w-md w-full bg-[#2b0c0c] text-white rounded-2xl shadow-xl border border-[#5e2d2d] p-6">
   <h2 className="text-xl font-bold mb-3 text-[#f5c26b]">{place.name}</h2>
-  <p className="text-sm text-[#e4d4c6] leading-relaxed">
-    Продано <span className="font-semibold text-white">124 свечи</span> и <span className="font-semibold text-white">87 салфеток</span> за последний месяц.
-    Увеличение продаж на <span className="text-green-400 font-semibold">12%</span>.
-  </p>
+ 
   <Link href={"/places/" + place.uniqueId} className="card-button mt-6 w-full bg-[#f5c26b] hover:bg-[#e8b146] text-black font-semibold py-2.5 px-4 rounded-xl transition duration-300">
     Перейти в заведение
   </Link>
