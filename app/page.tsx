@@ -4,11 +4,15 @@ import FormatCode from "@/components/FormatCode";
 import Loader from "@/components/Loader";
 import Profile from "@/components/Profile";
 import { useEffect, useState } from "react";
+import Link from 'next/link'
+import { ArrowPathIcon } from "@heroicons/react/24/outline"
+
 
 type Place = {
   _id: string;
   name: string;
   salaryFix: number;
+  uniqueId: string;
   hookahs: Record<string, {
     price: number;
     salary: number;
@@ -18,7 +22,6 @@ type Place = {
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
-  const [view, setView] = useState<"profile" | "code">("profile")
   const [places, setPlaces] = useState<Place[]>([])
   const [loadingPlaces, setLoadingPlaces] = useState(true)
 
@@ -45,52 +48,34 @@ export default function Home() {
     return isMounted ? <FormatCode /> : <Loader />
   }
 
-  const handleViewChange = () => {
-    setView(view === "profile" ? "code" : "profile")
-  }
-
   return (
-    <main className="flex min-h-screen flex-col items-center gap-2 p-2 md:p-10 lg:p-24 central-block">
-      <img
-        src="./img/sombralong.png"
-        alt="Sombra Batumi"
-        className="w-full max-w-md rounded-xl shadow-lg"
-      />
-      <div className="mt-4">
-        <p>This is a simple webapp that allows you to build a Telegram bot using the Telegram Bot Builder library.</p>
-        <p>The library is available on the <a href="https://github.com/tgbotbuilder/react-webapp-example" className="underline text-blue-600">GitHub repository</a>.</p>
-      </div>
-      <div>
-        <button onClick={handleViewChange} className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
-          {view === "code" ? "View Profile ?" : "View Code ?"}
-        </button>
-      </div>
 
-      {view === "profile" ? (
-        <div className="w-full mt-6">
-          {loadingPlaces ? (
-            <p>Загрузка заведений...</p>
-          ) : (
-            <ul className="space-y-4">
-              {places.map((place) => (
-                <li key={place._id} className="p-4 bg-white rounded shadow w-full max-w-md">
-                  <h3 className="font-bold text-xl">{place.name}</h3>
-                  <p className="text-sm text-gray-600">Фиксированная ставка: {place.salaryFix}₾</p>
-                  <ul className="mt-2 text-sm text-gray-800">
-                    {Object.entries(place.hookahs).map(([key, h]) => (
-                      <li key={key}>
-                        <strong>{key}:</strong> {h.price}₾ (ЗП: {h.salary} / с шефом: {h.salaryWChef})
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ) : (
-        renderCode()
-      )}
-    </main>
+<>
+      <div className="w-full mt-6">
+        {loadingPlaces ? (
+    <div className="flex items-center justify-center p-4">
+    <ArrowPathIcon className="w-6 h-6 animate-spin text-[#f5c26b]" />
+  </div>
+        )
+          :
+          <div className="flex flex-wrap gap-6 justify-center mt-6">
+            {places.map(place =>
+<div className="max-w-md w-full bg-[#2b0c0c] text-white rounded-2xl shadow-xl border border-[#5e2d2d] p-6">
+  <h2 className="text-xl font-bold mb-3 text-[#f5c26b]">{place.name}</h2>
+  <p className="text-sm text-[#e4d4c6] leading-relaxed">
+    Продано <span className="font-semibold text-white">124 свечи</span> и <span className="font-semibold text-white">87 салфеток</span> за последний месяц.
+    Увеличение продаж на <span className="text-green-400 font-semibold">12%</span>.
+  </p>
+  <Link href={"/places/" + place.uniqueId} className="card-button mt-6 w-full bg-[#a83232] hover:bg-[#c84040] text-white font-semibold py-2.5 px-4 rounded-xl transition duration-300">
+    Перейти в заведение
+  </Link>
+</div>
+
+
+            )}
+          </div>
+        }
+      </div>
+      </>
   );
 }

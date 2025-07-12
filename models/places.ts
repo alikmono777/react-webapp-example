@@ -8,6 +8,7 @@ const hookahSchema = new Schema({
 
 const placeSchema = new Schema({
   name: { type: String, required: true },
+  uniqueId: { type: String, required: true },
   hookahs: {
     type: Map,
     of: hookahSchema

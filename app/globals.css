@@ -11,8 +11,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-start-rgb: 14, 4, 4;
+    --background-end-rgb: 14, 5, 3;
   }
 }
 
@@ -34,4 +34,8 @@ body {
 
 .central-block {
  padding-top: 0 !important; 
+}
+.card-button {
+  display: block;
+    text-align: center;
 }
