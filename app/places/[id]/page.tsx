@@ -1,4 +1,7 @@
-import { use } from "react";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface Props {
   params: { id: string };
@@ -6,6 +9,22 @@ interface Props {
 
 export default function PlacePage({ params }: Props) {
   const { id } = params;
+  const router = useRouter(); // ✅ Вставляем сюда
+
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      router.back(); // работает, потому что router уже объявлен
+    });
+
+    return () => {
+      tg.BackButton.hide();
+      tg.BackButton.offClick(() => {}); // можно заменить на tg.BackButton.offClick()
+    };
+  }, [router]);
 
   return (
     <div className="p-6">
