@@ -2,22 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-
-const categories = [
-  "lite",
-  "standart",
-  "premium",
-  "grapefruitbowl",
-  "pineapplebowl",
-  "special",
-];
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function StatisticsPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const [from, setFrom] = useState<string>("");
   const [to, setTo] = useState<string>("");
   const [stats, setStats] = useState<any>(null);
+  const [placeData, setPlaceData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,9 +24,18 @@ export default function StatisticsPage({ params }: { params: { id: string } }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/stats?place=${id}&from=${from}&to=${to}`);
-      const data = await res.json();
-      setStats(data);
+      const [statsRes, placeRes] = await Promise.all([
+        fetch(`/api/stats?place=${id}&from=${from}&to=${to}`),
+        fetch(`/api/places/${id}`),
+      ]);
+
+      const [statsData, placeSettings] = await Promise.all([
+        statsRes.json(),
+        placeRes.json(),
+      ]);
+
+      setStats(statsData);
+      setPlaceData(placeSettings);
     } catch (err) {
       setError("Ошибка загрузки статистики");
     } finally {
@@ -69,16 +77,22 @@ export default function StatisticsPage({ params }: { params: { id: string } }) {
       {loading && <p className="text-white">Загрузка...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      {stats && (
+      {stats && placeData && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-lg font-semibold text-[#f5c26b] mb-2">Суммарно продано кальянов</h2>
+            <h2 className="text-lg font-semibold text-[#f5c26b] mb-2">
+              Суммарно продано кальянов
+            </h2>
             <ul className="list-disc ml-4 text-sm">
-              {categories.map((cat) => (
-                <li key={cat}>
-                  {cat}: {stats.totalByCategory?.[cat] || 0} шт. — {stats.revenueByCategory?.[cat] || 0}₾
-                </li>
-              ))}
+              {Object.entries(placeData.hookahs).map(
+                ([cat, config]: [string, any]) => (
+                  <li key={cat}>
+                    {cat}: {stats.totalByCategory?.[cat] || 0} шт. ×{" "}
+                    {config.price}₾ ={" "}
+                    {(stats.totalByCategory?.[cat] || 0) * config.price}₾
+                  </li>
+                )
+              )}
               <li className="mt-2 font-semibold">
                 Всего: {stats.totalHookahs || 0} шт.
               </li>
@@ -96,8 +110,19 @@ export default function StatisticsPage({ params }: { params: { id: string } }) {
               <LineChart data={stats.dailyChart || []}>
                 <XAxis dataKey="date" stroke="#ccc" fontSize={12} />
                 <YAxis stroke="#ccc" fontSize={12} />
-                <Tooltip contentStyle={{ backgroundColor: "#2a2a2a", color: "#fff" }} />
-                <Line type="monotone" dataKey="total" stroke="#f5c26b" strokeWidth={2} dot={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#2a2a2a",
+                    color: "#fff",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#f5c26b"
+                  strokeWidth={2}
+                  dot={false}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
