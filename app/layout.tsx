@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import Link from "next/link";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +27,22 @@ export default function RootLayout({
         alt="Sombra Batumi"
         className="w-full max-w-md rounded-xl"
       />
+          <div className="p-6 w-full">
+      <div className="flex gap-2 mb-4">
+      <Link
+          href={`/places/`}
+          className="flex-1 text-center py-2 px-4 rounded-xl border border-[#f5c26b] text-[#f5c26b] hover:bg-[#f5c26b]/10"
+        >
+          Заведения
+        </Link>
+        <Link
+          href={`/coworkers/`}
+          className="flex-1 text-center py-2 px-4 rounded-xl border border-[#f5c26b] text-[#f5c26b] hover:bg-[#f5c26b]/10"
+        >
+          Сотрудники
+        </Link>
+      </div>
+    </div>
       
         {children}
 
