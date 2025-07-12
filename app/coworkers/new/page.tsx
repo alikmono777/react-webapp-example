@@ -3,18 +3,25 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function NewStaffPage() {
+export default function NewCoworkerPage() {
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("master"); // кальянный мастер по умолчанию
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // здесь можно отправить POST-запрос в /api/staff
-    console.log("Создан сотрудник:", { name, role });
+    const res = await fetch("/api/coworkers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, role }),
+    });
 
-    router.push("/staff"); // возврат к списку
+    if (res.ok) {
+      router.push("/coworkers");
+    } else {
+      alert("❌ Ошибка при создании сотрудника");
+    }
   };
 
   return (
@@ -36,14 +43,15 @@ export default function NewStaffPage() {
         </div>
 
         <div>
-          <label className="block mb-1">Должность</label>
-          <input
-            type="text"
+          <label className="block mb-1">Роль</label>
+          <select
             className="w-full p-2 rounded bg-[#2a2a2a] border border-gray-600 text-white"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            required
-          />
+          >
+            <option value="master">Кальянный мастер</option>
+            <option value="senior">Старший кальянный мастер</option>
+          </select>
         </div>
 
         <button
