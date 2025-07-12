@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.central-block {
+ padding-top: 0 !important; 
+}
