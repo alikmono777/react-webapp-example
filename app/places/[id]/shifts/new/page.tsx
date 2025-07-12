@@ -1,4 +1,3 @@
-// ✅ /app/places/[id]/shifts/new/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,31 +5,33 @@ import { useRouter } from "next/navigation";
 
 export default function NewShiftPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+
   const [coworkers, setCoworkers] = useState<any[]>([]);
+  const [placeData, setPlaceData] = useState<any>(null);
+
   const [selectedCoworkers, setSelectedCoworkers] = useState<string[]>([]);
   const [sales, setSales] = useState<Record<string, number>>({});
-  const [date, setDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  );
+  const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [error, setError] = useState<string | null>(null);
+
   const [hasCoalman, setHasCoalman] = useState(false);
   const [coalmanId, setCoalmanId] = useState<string>("");
 
-  const prices: Record<string, number> = {
-    lite: 75,
-    standart: 90,
-    premium: 100,
-    grapefruitbowl: 125,
-    pineapplebowl: 155,
-    special: 180,
-  };
-
+  // Загружаем сотрудников
   useEffect(() => {
     fetch("/api/coworkers")
       .then((res) => res.json())
       .then(setCoworkers)
       .catch(() => setError("Не удалось загрузить сотрудников"));
   }, []);
+
+  // Загружаем настройки заведения
+  useEffect(() => {
+    fetch(`/api/places/${params.id}`)
+      .then((res) => res.json())
+      .then(setPlaceData)
+      .catch(() => setError("Не удалось загрузить настройки заведения"));
+  }, [params.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +83,10 @@ export default function NewShiftPage({ params }: { params: { id: string } }) {
     const num = parseInt(value);
     setSales((prev) => ({ ...prev, [key]: isNaN(num) ? 0 : num }));
   };
+
+  if (!placeData) {
+    return <p className="text-white p-6">Загрузка настроек заведения...</p>;
+  }
 
   return (
     <div className="p-6 text-white max-w-2xl mx-auto">
@@ -149,10 +154,10 @@ export default function NewShiftPage({ params }: { params: { id: string } }) {
 
         <div>
           <label className="block mb-2">Продажи кальянов</label>
-          {Object.entries(prices).map(([key, price]) => (
+          {Object.entries(placeData.hookahs).map(([key, config]) => (
             <div key={key} className="mb-2">
               <label className="block text-sm mb-1 text-[#f5c26b] capitalize">
-                {key} — {price}₾
+                {key} — {config.price}₾
               </label>
               <input
                 type="number"
