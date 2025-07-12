@@ -12,7 +12,7 @@ export default function ShiftsPage({ params }: { params: { id: string } }) {
     <div>
       <Link
         href={`/places/${params.id}/shifts/new`}
-        className="block mb-4 bg-[#a83232] hover:bg-[#c84040] text-white font-semibold py-2 px-4 rounded-xl text-center"
+        className="block mb-4 bg-[#2b0c0c] border border-[#5e2d2d] text-white font-semibold py-2 px-4 rounded-xl text-center"
       >
         Добавить смену
       </Link>

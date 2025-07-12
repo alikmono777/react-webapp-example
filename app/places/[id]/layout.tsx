@@ -32,23 +32,23 @@ export default function PlaceLayout({
   return (
     <div className="p-6 w-full">
       <div className="flex gap-2 mb-4">
-        <Link
-          href={`/places/${id}/settings`}
-          className="flex-1 text-center py-2 px-4 rounded-xl bg-[#a83232] text-white"
+      <Link
+          href={`/places/${id}/shifts`}
+          className="flex-1 text-center py-2 px-4 rounded-xl border border-[#f5c26b] text-[#f5c26b] hover:bg-[#f5c26b]/10"
         >
-          Настройки
+          Смены
         </Link>
         <Link
           href={`/places/${id}/statistics`}
-          className="flex-1 text-center py-2 px-4 rounded-xl bg-[#a83232] text-white"
+          className="flex-1 text-center py-2 px-4 rounded-xl border border-[#f5c26b] text-[#f5c26b] hover:bg-[#f5c26b]/10"
         >
           Статистика
         </Link>
         <Link
-          href={`/places/${id}/shifts`}
-          className="flex-1 text-center py-2 px-4 rounded-xl bg-[#a83232] text-white"
+          href={`/places/${id}/settings`}
+          className="flex-1 text-center py-2 px-4 rounded-xl border border-[#f5c26b] text-[#f5c26b] hover:bg-[#f5c26b]/10"
         >
-          Смены
+          Настройки
         </Link>
       </div>
       {children}

@@ -66,7 +66,7 @@ export default function Home() {
     Продано <span className="font-semibold text-white">124 свечи</span> и <span className="font-semibold text-white">87 салфеток</span> за последний месяц.
     Увеличение продаж на <span className="text-green-400 font-semibold">12%</span>.
   </p>
-  <Link href={"/places/" + place.uniqueId} className="card-button mt-6 w-full bg-[#a83232] hover:bg-[#c84040] text-white font-semibold py-2.5 px-4 rounded-xl transition duration-300">
+  <Link href={"/places/" + place.uniqueId} className="card-button mt-6 w-full bg-[#f5c26b] hover:bg-[#e8b146] text-black font-semibold py-2.5 px-4 rounded-xl transition duration-300">
     Перейти в заведение
   </Link>
 </div>
